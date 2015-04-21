@@ -1,0 +1,39 @@
+{
+	"name": "pinf-to-mozilla-addon",
+	"boot": {
+		"package": "./package.json"
+	},
+	"config": {
+		"github.com/pinf-it/pinf-it-bundler/0": {
+			"target": "browser"
+		},
+		"github.com/pinf-to/pinf-to-mozilla-addon/0": {
+			"templates": {
+			}
+		},
+		"github.com/pinf-to/pinf-to-mozilla-firefox-profile/0": {
+	        "profiles": {
+	        	"test": {
+		            "browserVersion": "39.0a1",
+		            "browserRelease": "nightly",
+	        		"extensions": {
+						"fbtrace@getfirebug.com": "http://getfirebug.com/releases/fbtrace/3.0/fbtrace-3.0b1.xpi"
+	        		},
+                    "preferences": {
+                        "extensions.firebug.alwaysOpenTraceConsole": true
+                    }
+	        	},
+	        	"run": {
+		            "browserVersion": "39.0a1",
+		            "browserRelease": "nightly",
+	        		"extensions": {
+						"fbtrace@getfirebug.com": "http://getfirebug.com/releases/fbtrace/3.0/fbtrace-3.0b1.xpi"
+	        		},
+                    "preferences": {
+                        "extensions.firebug.alwaysOpenTraceConsole": true
+                    }
+	        	}
+	        }
+        }
+	}
+}

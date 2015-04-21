@@ -1,0 +1,17 @@
+{
+  "name": "%%NAME%%",
+  "title": "%%NAME%%",
+  "id": "%%ID%%",
+  "description": "%%NAME%%",
+  "author": "Christoph Dorn",
+  "license": "MPL 2.0",
+  "version": "0.1.0",
+  "main": "lib/main",
+  "dependencies": [
+    "pinf-for-mozilla-addon-sdk",
+    "firebug.sdk"
+  ],
+  "directories": {
+    "deploy": "data/bundles/components"
+  }
+}
