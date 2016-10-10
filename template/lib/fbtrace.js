@@ -1,7 +1,7 @@
 
 const { Cc: CC, Cu:CU, Ci:CI } = require("chrome");
 
-const DEBUG = false;
+const DEBUG = true;
 
 var Trace = require("firebug.sdk/lib/core/trace").FBTrace.to("DBG_PGS/HOIST");
 
@@ -39,19 +39,19 @@ Console.prototype.for = function (context) {
     return (new Console(context));
 }
 Console.prototype.log = function () {
-if (DEBUG) dump("[pinf-hoist] console.log\n");
+if (DEBUG) dump("[pinf-hoist] console.log " + Array.prototype.slice.call(arguments).join(", ") + "\n");
     return log(this._prefixLabel("" + arguments[0]), Array.prototype.slice.call(arguments));
 }
 Console.prototype.verbose = function (label, obj) {
-if (DEBUG) dump("[pinf-hoist] console.verbose\n");
+if (DEBUG) dump("[pinf-hoist] console.verbose " + Array.prototype.slice.call(arguments).join(", ") + "\n");
     return log(this._prefixLabel("" + arguments[0]), Array.prototype.slice.call(arguments));
 }
 Console.prototype.debug = function (label, obj) {
-if (DEBUG) dump("[pinf-hoist] console.debug\n");
+if (DEBUG) dump("[pinf-hoist] console.debug " + Array.prototype.slice.call(arguments).join(", ") + "\n");
     return log(this._prefixLabel("DEBUG: " + arguments[0]), Array.prototype.slice.call(arguments));
 }
 Console.prototype.error = function (label, obj) {
-if (DEBUG) dump("[pinf-hoist] console.error\n");
+if (DEBUG) dump("[pinf-hoist] console.error " + Array.prototype.slice.call(arguments).join(", ") + "\n");
     return log(this._prefixLabel("ERROR: " + arguments[0]), Array.prototype.slice.call(arguments));
 }
 
@@ -104,4 +104,3 @@ exports.Insight = Insight;
 exports.insight = new Insight({
     name: "pinf-program"
 });
-

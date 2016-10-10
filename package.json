@@ -3,28 +3,13 @@
   "name": "pinf-to-mozilla-addon",
   "version": "0.1.0",
   "main": "plugin.js",
-  "upstream": {
-    "packages": {
-      "top": [
-        "../*",
-        "../../*",
-        "../../../../*",
-        "../../../_upstream/os-inception/*",
-        "../../2-org.pinf/*",
-        "/opt/services/*"
-      ]
-    }
-  },
   "dependencies": {
     "firebug.sdk": "^0.5.5",
     "smi.cli": "0.x",
     "to.pinf.lib": "0.1.x"
   },
-  "mappings": {
-    "pinf-for-mozilla-addon-sdk": "top/pinf-for-mozilla-addon-sdk"
-  },
   "scripts": {
-    "install": "./node_modules/.bin/smi install",
+    "install": "cd template; npm install firebug.sdk",
     "build-xpi": "cd demo ; jpm xpi"
   },
   "config": {

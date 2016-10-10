@@ -53,8 +53,12 @@ if (DEBUG) dump("[pinf-hoist] main() start\n");
 
   function monitorComponentServer (config) {
 
+    var url = DATA.url(module.id.replace(/\/lib\/main\.js$/, "/data/bundle-server-monitor.js")).replace(/-dot-org\/data\/node_modules/, "-dot-org/node_modules");
+
+    if (DEBUG) dump("[pinf-hoist] url " + url + "\n");
+
     var pageWorker = API.PAGE_WORKER.Page({
-      contentScriptFile: "./bundle-server-monitor.js",
+      contentScriptFile: url,
       contentScriptOptions: {
         "rootVortexUrl": config.rootVortexUrl
       }
@@ -87,7 +91,7 @@ if (DEBUG) dump("[pinf-hoist] main() start\n");
                 notifyObservers({}, "startupcache-invalidate", null);
 
             return API.ADDON_INSTALLER.enable(addonId);
-        });        
+        });
       }
 
       reloadExtension();
@@ -98,11 +102,28 @@ if (DEBUG) dump("[pinf-hoist] main() start\n");
   function loadComponents () {
 
     // TODO: Intercept error and log/fail init.
-    API.REQUEST({
-      url: require.resolve("../program.json"),
-      onComplete: function (response) {
 
-        var config = response.json.config || {};
+    function ensureConfig (callback) {
+
+        if (options.programConfig) {
+            return callback(null, options.programConfig);
+        }
+
+        API.REQUEST({
+          url: require.resolve("../program.json"),
+          onComplete: function (response) {
+
+            var config = response.json.config || {};
+
+            return callback(null, config);
+          }
+        }).get();
+    }
+
+
+    ensureConfig(function (err, config) {
+        if (err) throw err;
+
         FBTRACE.console.log("[pinf-hoist] config", config);
 
         var uri = config.rootVortexUrl || DATA.url("bundles/components/vortex.js");
@@ -145,9 +166,12 @@ if (DEBUG) dump("[pinf-hoist] main() start\n");
         }, function(sandbox) {
           if (DEBUG) dump("[pinf-hoist] init sandbox\n");
 
-          monitorComponentServer(config);
+          if (config.reloadOnChanges) {
+              monitorComponentServer(config);
+          }
 
-          if (DEBUG) FBTRACE.console.log("[pinf-hoist] call main using API", API);
+          if (DEBUG) dump("[pinf-hoist] call main using API\n");
+//          if (DEBUG) FBTRACE.console.log("[pinf-hoist] call main using API", API);
 
           var api = (sandbox.for || sandbox.main)(API);
 
@@ -211,8 +235,7 @@ if (DEBUG) dump("[pinf-hoist] main() start\n");
 
           if (DEBUG) dump("[pinf-hoist] sandbox inited\n");
         });
-      }
-    }).get();
+    });
   }
 
   loadComponents();
@@ -230,4 +253,3 @@ exports.onUnload = onUnload;
 
 
 if (DEBUG) dump("[pinf-hoist] loaded\n");
-
